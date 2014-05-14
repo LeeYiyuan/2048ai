@@ -14,7 +14,7 @@ extern "C"
 }
 
 // Calculates the best possible move by player
-double player_move(int* grid, std::vector<int*>* computed_grids, std::vector<double>* computed_scores, int depth);
+double player_move(int* grid, std::vector<int*>& computed_grids, std::vector<double>& computed_scores, int depth);
 
 // Calculates the score, averaged (with weights) over randomly added tiles
 double computer_move(int* grid, int depth);

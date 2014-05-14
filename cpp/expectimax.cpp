@@ -15,7 +15,7 @@ int c_best_direction(
 	int c30, int c31, int c32, int c33,
 	int depth)
 {
-	int* grid = new int[16];
+	int grid[16];
 	grid[index(0, 0)] = c00;
 	grid[index(0, 1)] = c01;
 	grid[index(0, 2)] = c02;
@@ -37,13 +37,12 @@ int c_best_direction(
     int best_dir = -1;
 
     for(int direction = 0; direction < 4; direction++){
-		int* computer_grid = new int[16];
+		int computer_grid[16];
 		copy(grid, computer_grid);
 		move(computer_grid, direction);
 
 		if (equals(computer_grid, grid)) // No change due to movement
 		{
-			delete[] computer_grid;
 			continue;
 		}
 		
@@ -53,16 +52,12 @@ int c_best_direction(
             best_score = computer_score;
             best_dir = direction;
         }
-		
-		delete[] computer_grid;
     }
-
-	delete[] grid;
-    return best_dir;
+	return best_dir;
 }
 
 // Calculates the best possible move by player.
-double player_move(int* grid, std::vector<int*>* computed_grids, std::vector<double>* computed_scores,int depth)
+double player_move(int* grid, std::vector<int*>& computed_grids, std::vector<double>& computed_scores,int depth)
 {
 	if (depth == 0) // End of branch
 	{		
@@ -86,11 +81,11 @@ double player_move(int* grid, std::vector<int*>* computed_grids, std::vector<dou
 
 		// Pruning
 		bool was_computed = false;
-		for(int i = 0; i < computed_grids->size() && !was_computed; i++)
+		for(int i = 0; i < computed_grids.size() && !was_computed; i++)
 		{
-			if (equals(computed_grids->at(i), computer_grid)) // Branch was previously calculated
+			if (equals(computed_grids.at(i), computer_grid)) // Branch was previously calculated
 			{
-				computer_score = computed_scores->at(i);
+				computer_score = computed_scores.at(i);
 				was_computed = true;
 				delete[] computer_grid;
 			}
@@ -101,8 +96,8 @@ double player_move(int* grid, std::vector<int*>* computed_grids, std::vector<dou
 			computer_score = computer_move(computer_grid, depth - 1);
 			
 			// Add branch to prunes (I don't think "prunes" is the correct term, but anyway...)
-			computed_grids->push_back(computer_grid);
-			computed_scores->push_back(computer_score);
+			computed_grids.push_back(computer_grid);
+			computed_scores.push_back(computer_score);
 		}
 
         if (computer_score > best_score){
@@ -120,8 +115,8 @@ double computer_move(int* grid, int depth)
 	double total_weight =0;
 	
 	// Pruning trackers
-	std::vector<int*>* next_computed_grids = new std::vector<int*>;
-	std::vector<double>* next_computed_scores = new std::vector<double>;
+	std::vector<int*> next_computed_grids;
+	std::vector<double> next_computed_scores;
 
 	for(int x = 0; x < 4; x++)
 	{
@@ -131,26 +126,22 @@ double computer_move(int* grid, int depth)
 			{
 				for(int i = 0; i < MOVES_COUNT; i++)
 				{
-					int* player_grid = new int[16];
+					int player_grid[16];
 					copy(grid, player_grid);
 					player_grid[index(x, y)] = MOVES[i];
 
 					double score = player_move(player_grid, next_computed_grids, next_computed_scores, depth - 1);
 					total_score += PROBABILITIES[i] * score; // Weighted average. This is the essence of expectimax.
 					total_weight += PROBABILITIES[i]; // Weighted average. This is the essence of expectimax.
-
-					delete[] player_grid;
 				}
 			}
 		}
 	}
 
-	for(int i = 0; i < next_computed_grids->size(); i++)
+	for(int i = 0; i < next_computed_grids.size(); i++)
 	{
-		delete[] next_computed_grids->at(i); // Deletes all pruned branches score
+		delete[] next_computed_grids.at(i); // Deletes all pruned branches score
 	}
-	delete next_computed_grids;
-	delete next_computed_scores;
 
 	return total_weight == 0 ? 0 : total_score / total_weight;
 }
