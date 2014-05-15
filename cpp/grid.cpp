@@ -16,7 +16,7 @@ void shift_up(Grid& grid, int column)
             }else{
                 if (targetValue == currentValue){
                     grid.cells[index(column, i)] = 0;
-                    grid.cells[index(column, target)]++;
+                    grid.cells[index(column, target)] <<= 1;
                 }else{
                     grid.cells[index(column, i)] = 0;
                     grid.cells[index(column, target + 1)] = currentValue;
@@ -41,7 +41,7 @@ void shift_down(Grid& grid, int column)
             }else{
                 if (targetValue == currentValue){
                     grid.cells[index(column, i)] = 0;
-                    grid.cells[index(column, target)]++;
+                    grid.cells[index(column, target)] <<= 1;
                 }else{
                     grid.cells[index(column, i)] = 0;
                     grid.cells[index(column, target - 1)] = currentValue;
@@ -66,7 +66,7 @@ void shift_left(Grid& grid, int row)
             }else{
                 if (targetValue == currentValue){
                     grid.cells[index(i, row)] = 0;
-                    grid.cells[index(target, row)]++;
+                    grid.cells[index(target, row)] <<= 1;
                 }else{
                     grid.cells[index(i, row)] = 0;
                     grid.cells[index(target + 1, row)] = currentValue;
@@ -91,7 +91,7 @@ void shift_right(Grid& grid, int row)
             }else{
                 if (targetValue == currentValue){
                     grid.cells[index(i, row)] = 0;
-                    grid.cells[index(target, row)]++;
+                    grid.cells[index(target, row)] <<= 1;
                 }else{
                     grid.cells[index(i, row)] = 0;
                     grid.cells[index(target - 1, row)] = currentValue;
