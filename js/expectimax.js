@@ -7,5 +7,5 @@ function bestMove(log_grid)
         log_grid[1][0], log_grid[1][1], log_grid[1][2], log_grid[1][3],
         log_grid[2][0], log_grid[2][1], log_grid[2][2], log_grid[2][3],
         log_grid[3][0], log_grid[3][1], log_grid[3][2], log_grid[3][3],
-	3);
+	4);
 }
