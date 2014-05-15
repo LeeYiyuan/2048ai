@@ -1,1 +1,1 @@
-emcc -o2 expectimax.cpp grid.cpp -o c_expectimax.js -s EXPORTED_FUNCTIONS="['_c_best_direction']"
+emcc -O3 expectimax.cpp grid.cpp -o c_expectimax.js -s EXPORTED_FUNCTIONS="['_c_best_direction']" --memory-init-file 1

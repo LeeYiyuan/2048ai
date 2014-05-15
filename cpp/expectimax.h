@@ -1,5 +1,9 @@
 #pragma once
 #include <vector>
+#include "grid.h"
+#include <unordered_map>
+
+typedef std::unordered_map<Grid, double, std::hash<Grid> > Cache;
 
 // Exported function. Call this to compute the best possible move.
 // cxy = value of x_th column and y_th row.
@@ -14,7 +18,7 @@ extern "C"
 }
 
 // Calculates the best possible move by player
-double player_move(int* grid, std::vector<int*>& computed_grids, std::vector<double>& computed_scores, int depth);
+double player_move(const Grid& grid, Cache& cache, int depth);
 
 // Calculates the score, averaged (with weights) over randomly added tiles
-double computer_move(int* grid, int depth);
+double computer_move(const Grid& grid, int depth);

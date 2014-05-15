@@ -1,44 +1,25 @@
 #include "grid.h"
-#include <string.h>
 #include <cstdlib>
-
-// Checks if two grids are equal
-bool equals(int* grid1, int* grid2)
-{
-	for(int i = 0; i < 16; i++)
-	{
-		if (grid1[i] != grid2[i])
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-// Copies the contents of one grid to the other
-void copy(int* grid, int* output)
-{
-	memcpy(output, grid, sizeof(int) * 16); // To avoid for-loop. Performance gain is controversial.
-}
+#include <stdint.h>
 
 // Shifts up (Apply an upward gravity) to an entire column
-void shift_up(int* grid, int column)
+void shift_up(Grid& grid, int column)
 {
     int target = 0;
     for(int i = 1; i < 4; i++){
-        int targetValue = grid[index(column, target)];
-        int currentValue = grid[index(column, i)];
+        cell_t targetValue = grid.cells[index(column, target)];
+        cell_t currentValue = grid.cells[index(column, i)];
         if (currentValue != 0){
             if (targetValue == 0){
-                grid[index(column, target)] = currentValue;
-                grid[index(column, i)] = 0;
+                grid.cells[index(column, target)] = currentValue;
+                grid.cells[index(column, i)] = 0;
             }else{
                 if (targetValue == currentValue){
-                    grid[index(column, i)] = 0;
-                    grid[index(column, target)] <<= 1;
+                    grid.cells[index(column, i)] = 0;
+                    grid.cells[index(column, target)]++;
                 }else{
-                    grid[index(column, i)] = 0;
-                    grid[index(column, target + 1)] = currentValue;
+                    grid.cells[index(column, i)] = 0;
+                    grid.cells[index(column, target + 1)] = currentValue;
                 }
                 target++;
             }
@@ -47,23 +28,23 @@ void shift_up(int* grid, int column)
 }
 
 // Shifts down (Apply a downwards gravity) to an entire column
-void shift_down(int* grid, int column)
+void shift_down(Grid& grid, int column)
 {
     int target = 3;
     for(int i = 2; i >= 0; i--){
-        int targetValue = grid[index(column, target)];
-        int currentValue = grid[index(column, i)];
+        cell_t targetValue = grid.cells[index(column, target)];
+        cell_t currentValue = grid.cells[index(column, i)];
         if (currentValue != 0){
             if (targetValue == 0){
-                grid[index(column, target)] = currentValue;
-                grid[index(column, i)] = 0;
+                grid.cells[index(column, target)] = currentValue;
+                grid.cells[index(column, i)] = 0;
             }else{
                 if (targetValue == currentValue){
-                    grid[index(column, i)] = 0;
-                    grid[index(column, target)] <<= 1;
+                    grid.cells[index(column, i)] = 0;
+                    grid.cells[index(column, target)]++;
                 }else{
-                    grid[index(column, i)] = 0;
-                    grid[index(column, target - 1)] = currentValue;
+                    grid.cells[index(column, i)] = 0;
+                    grid.cells[index(column, target - 1)] = currentValue;
                 }
                 target--;
             }
@@ -72,23 +53,23 @@ void shift_down(int* grid, int column)
 }
 
 // Shifts left (Apply a leftwards gravity) to an entire row
-void shift_left(int* grid, int row)
+void shift_left(Grid& grid, int row)
 {
 	int target = 0;
     for(int i = 1; i < 4; i++){
-        int targetValue = grid[index(target, row)];
-        int currentValue = grid[index(i, row)];
+        cell_t targetValue = grid.cells[index(target, row)];
+        cell_t currentValue = grid.cells[index(i, row)];
         if (currentValue != 0){
             if (targetValue == 0){
-                grid[index(target, row)] = currentValue;
-                grid[index(i, row)] = 0;
+                grid.cells[index(target, row)] = currentValue;
+                grid.cells[index(i, row)] = 0;
             }else{
                 if (targetValue == currentValue){
-                    grid[index(i, row)] = 0;
-                    grid[index(target, row)] <<= 1;
+                    grid.cells[index(i, row)] = 0;
+                    grid.cells[index(target, row)]++;
                 }else{
-                    grid[index(i, row)] = 0;
-                    grid[index(target + 1, row)] = currentValue;
+                    grid.cells[index(i, row)] = 0;
+                    grid.cells[index(target + 1, row)] = currentValue;
                 }
                 target++;
             }
@@ -97,23 +78,23 @@ void shift_left(int* grid, int row)
 }
 
 // Shifts right (Apply a rightwards gravity) to an entire row
-void shift_right(int* grid, int row)
+void shift_right(Grid& grid, int row)
 {
 	int target = 3;
     for(int i = 2; i >= 0; i--){
-        int targetValue = grid[index(target, row)];
-        int currentValue = grid[index(i, row)];
+        cell_t targetValue = grid.cells[index(target, row)];
+        cell_t currentValue = grid.cells[index(i, row)];
         if (currentValue != 0){
             if (targetValue == 0){
-                grid[index(target, row)] = currentValue;
-                grid[index(i, row)] = 0;
+                grid.cells[index(target, row)] = currentValue;
+                grid.cells[index(i, row)] = 0;
             }else{
                 if (targetValue == currentValue){
-                    grid[index(i, row)] = 0;
-                    grid[index(target, row)] <<= 1;
+                    grid.cells[index(i, row)] = 0;
+                    grid.cells[index(target, row)]++;
                 }else{
-                    grid[index(i, row)] = 0;
-                    grid[index(target - 1, row)] = currentValue;
+                    grid.cells[index(i, row)] = 0;
+                    grid.cells[index(target - 1, row)] = currentValue;
                 }
                 target--;
             }
@@ -123,7 +104,7 @@ void shift_right(int* grid, int row)
 
 // Moves the entire grid in a direction.
 // 0 = up, 1 = right, 2 = down, 3 = left
-void move(int* grid, int direction)
+void move(Grid& grid, int direction)
 {
     switch(direction){
         case 0:
@@ -150,15 +131,15 @@ void move(int* grid, int direction)
 }
 
 // Computes the gradient of a grid
-int gradient(int* grid)
+int gradient(const Grid& grid)
 {
     int gradientX = 0;
     int gradientY = 0;
 
     for(int x = 0; x < 4; x++){
         for(int y = 0; y < 4; y++){
-			gradientX += grid[index(x,y)] * (2 * x - 3);
-			gradientY += grid[index(x,y)]* (2 * y - 3);
+			gradientX += grid.cells[index(x,y)] * (2 * x - 3);
+			gradientY += grid.cells[index(x,y)]* (2 * y - 3);
 		}
     }
 
@@ -166,17 +147,17 @@ int gradient(int* grid)
 }
 
 // Checks for a dead end
-bool has_move(int* grid)
+bool has_move(const Grid& grid)
 {
 	for(int x = 0; x < 4; x++)
 	{
 		for(int y = 0; y < 4; y++)
 		{
-			if (grid[index(x, y)] == 0)
+			if (grid.cells[index(x, y)] == 0)
 				return true;
-			if (x < 3 && grid[index(x, y)] == grid[index(x + 1, y)])
+			if (x < 3 && grid.cells[index(x, y)] == grid.cells[index(x + 1, y)])
 				return true;
-			if (y < 3 && grid[index(x, y)] == grid[index(x, y+1)])
+			if (y < 3 && grid.cells[index(x, y)] == grid.cells[index(x, y+1)])
 				return true;
 		}
 	}
