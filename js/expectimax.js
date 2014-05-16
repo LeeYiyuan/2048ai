@@ -9,3 +9,9 @@ function bestMove(log_grid)
         log_grid[3][0], log_grid[3][1], log_grid[3][2], log_grid[3][3],
 	4);
 }
+
+function initMoveTable()
+{
+    var init_move_table = Module.cwrap('init_move_table');
+    init_move_table();
+}

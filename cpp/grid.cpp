@@ -1,105 +1,78 @@
 #include "grid.h"
 #include <cstdlib>
 #include <stdint.h>
+#include "move.h"
 
-// Shifts up (Apply an upward gravity) to an entire column
-void shift_up(Grid& grid, int column)
+// Shifts the entire grid upwards
+void shift_up(Grid& grid)
 {
-    int target = 0;
-    for(int i = 1; i < 4; i++){
-        cell_t targetValue = grid.cells[index(column, target)];
-        cell_t currentValue = grid.cells[index(column, i)];
-        if (currentValue != 0){
-            if (targetValue == 0){
-                grid.cells[index(column, target)] = currentValue;
-                grid.cells[index(column, i)] = 0;
-            }else{
-                if (targetValue == currentValue){
-                    grid.cells[index(column, i)] = 0;
-                    grid.cells[index(column, target)] <<= 1;
-                }else{
-                    grid.cells[index(column, i)] = 0;
-                    grid.cells[index(column, target + 1)] = currentValue;
-                }
-                target++;
-            }
-        }
-    }
+	for(int column = 0; column < 4; column++)
+	{
+		cell_t cells[4];
+		for(int y = 0; y < 4; y++)
+		{
+			cells[y] = grid.cells[index(column, y)];
+		}
+		lookup_move(cells);
+		for(int y = 0; y < 4; y++)
+		{
+			grid.cells[index(column, y)] = cells[y];
+		}
+	}
 }
 
-// Shifts down (Apply a downwards gravity) to an entire column
-void shift_down(Grid& grid, int column)
+// Shifts the entire grid downwards
+void shift_down(Grid& grid)
 {
-    int target = 3;
-    for(int i = 2; i >= 0; i--){
-        cell_t targetValue = grid.cells[index(column, target)];
-        cell_t currentValue = grid.cells[index(column, i)];
-        if (currentValue != 0){
-            if (targetValue == 0){
-                grid.cells[index(column, target)] = currentValue;
-                grid.cells[index(column, i)] = 0;
-            }else{
-                if (targetValue == currentValue){
-                    grid.cells[index(column, i)] = 0;
-                    grid.cells[index(column, target)] <<= 1;
-                }else{
-                    grid.cells[index(column, i)] = 0;
-                    grid.cells[index(column, target - 1)] = currentValue;
-                }
-                target--;
-            }
-        }
-    }
+	for(int column = 0; column < 4; column++)
+	{
+		cell_t cells[4];
+		for(int y = 0; y < 4; y++)
+		{
+			cells[y] = grid.cells[index(column, 3 - y)];
+		}
+		lookup_move(cells);
+		for(int y = 0; y < 4; y++)
+		{
+			grid.cells[index(column, 3 - y)] = cells[y];
+		}
+	}
 }
 
-// Shifts left (Apply a leftwards gravity) to an entire row
-void shift_left(Grid& grid, int row)
+// Shifts the entiregrid leftwards
+void shift_left(Grid& grid)
 {
-	int target = 0;
-    for(int i = 1; i < 4; i++){
-        cell_t targetValue = grid.cells[index(target, row)];
-        cell_t currentValue = grid.cells[index(i, row)];
-        if (currentValue != 0){
-            if (targetValue == 0){
-                grid.cells[index(target, row)] = currentValue;
-                grid.cells[index(i, row)] = 0;
-            }else{
-                if (targetValue == currentValue){
-                    grid.cells[index(i, row)] = 0;
-                    grid.cells[index(target, row)] <<= 1;
-                }else{
-                    grid.cells[index(i, row)] = 0;
-                    grid.cells[index(target + 1, row)] = currentValue;
-                }
-                target++;
-            }
-        }
-    }
+	for(int row = 0; row < 4; row++)
+	{
+		cell_t cells[4];
+		for(int x = 0; x < 4; x++)
+		{
+			cells[x] = grid.cells[index(x, row)];
+		}
+		lookup_move(cells);
+		for(int x = 0; x < 4; x++)
+		{
+			grid.cells[index(x, row)] = cells[x];
+		}
+	}
 }
 
-// Shifts right (Apply a rightwards gravity) to an entire row
-void shift_right(Grid& grid, int row)
+// Shifts the entire grid rightwards
+void shift_right(Grid& grid)
 {
-	int target = 3;
-    for(int i = 2; i >= 0; i--){
-        cell_t targetValue = grid.cells[index(target, row)];
-        cell_t currentValue = grid.cells[index(i, row)];
-        if (currentValue != 0){
-            if (targetValue == 0){
-                grid.cells[index(target, row)] = currentValue;
-                grid.cells[index(i, row)] = 0;
-            }else{
-                if (targetValue == currentValue){
-                    grid.cells[index(i, row)] = 0;
-                    grid.cells[index(target, row)] <<= 1;
-                }else{
-                    grid.cells[index(i, row)] = 0;
-                    grid.cells[index(target - 1, row)] = currentValue;
-                }
-                target--;
-            }
-        }
-    }
+	for(int row = 0; row < 4; row++)
+	{
+		cell_t cells[4];
+		for(int x = 0; x < 4; x++)
+		{
+			cells[x] = grid.cells[index(3 - x, row)];
+		}
+		lookup_move(cells);
+		for(int x = 0; x < 4; x++)
+		{
+			grid.cells[index(3 - x, row)] = cells[x];
+		}
+	}
 }
 
 // Moves the entire grid in a direction.
@@ -108,24 +81,16 @@ void move(Grid& grid, int direction)
 {
     switch(direction){
         case 0:
-            for(int column = 0; column < 4; column++){
-				shift_up(grid, column);
-            }
+			shift_up(grid);
             break;
         case 1:
-            for(int row = 0; row < 4; row++){
-				shift_right(grid, row);
-            }
+			shift_right(grid);
             break;
         case 2:
-            for(int column = 0; column < 4; column++){
-				shift_down(grid, column);
-            }
+			shift_down(grid);
             break;
         case 3:
-            for(int row = 0; row < 4; row++){
-				shift_left(grid, row);
-            }
+			shift_left(grid);
             break;
     }
 }
@@ -138,8 +103,12 @@ int gradient(const Grid& grid)
 
     for(int x = 0; x < 4; x++){
         for(int y = 0; y < 4; y++){
-			gradientX += grid.cells[index(x,y)] * (2 * x - 3);
-			gradientY += grid.cells[index(x,y)]* (2 * y - 3);
+			int value = 1 << grid.cells[index(x,y)];
+			if (grid.cells[index(x,y)] != 1) // i.e. cell not empty
+			{
+				gradientX += value * (2 * x - 3);
+				gradientY += value * (2 * y - 3);
+			}
 		}
     }
 

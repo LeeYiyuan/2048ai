@@ -1,6 +1,5 @@
 #include "expectimax.h"
 #include "grid.h"
-#include <vector>
 
 #define MOVES_COUNT 2
 

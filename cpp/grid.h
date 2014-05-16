@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <string>
 
-typedef uint16_t cell_t;
+typedef uint8_t cell_t;
 
 struct Grid
 {
@@ -22,12 +22,12 @@ struct Grid
 namespace std {
 template<>
 struct hash<Grid> {
-	inline size_t operator()(const Grid& field) const 
+	inline size_t operator()(const Grid& grid) const 
 	{
 		uint32_t h = 2166136261;
 		for(int i = 0; i < 16; i++)
 		{
-			h ^= field.cells[i] * 16777619;
+			h ^= grid.cells[i] * 16777619;
 		}
 		return h;
 	}
@@ -41,10 +41,10 @@ inline int index(int x, int y)
 }
 
 // Movements
-void shift_up(Grid& grid, int column);
-void shift_down(Grid& grid, int row);
-void shift_left(Grid& grid, int column);
-void shift_right(Grid& grid, int row);
+void shift_up(Grid& grid);
+void shift_down(Grid& grid);
+void shift_left(Grid& grid);
+void shift_right(Grid& grid);
 void move(Grid& grid, int direction);
 
 // Heuristics
