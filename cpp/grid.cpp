@@ -1,7 +1,30 @@
 #include "grid.h"
 #include <cstdlib>
 #include <stdint.h>
-#include "move.h"
+
+void move(cell_t cells[4])
+{
+	int target = 0;
+    for(int i = 1; i < 4; i++){
+        cell_t targetValue = cells[target];
+        cell_t currentValue = cells[i];
+        if (currentValue != 0){
+            if (targetValue == 0){
+				cells[target] = currentValue;
+				cells[i] = 0;
+            }else{
+                if (targetValue == currentValue){
+					cells[i] = 0;
+					cells[target] <<= 1;
+                }else{
+					cells[i] = 0;
+					cells[target + 1] = currentValue;
+                }
+                target++;
+            }
+        }
+    }
+}
 
 // Shifts the entire grid upwards
 void shift_up(Grid& grid)
@@ -13,7 +36,7 @@ void shift_up(Grid& grid)
 		{
 			cells[y] = grid.cells[index(column, y)];
 		}
-		lookup_move(cells);
+		move(cells);
 		for(int y = 0; y < 4; y++)
 		{
 			grid.cells[index(column, y)] = cells[y];
@@ -31,7 +54,7 @@ void shift_down(Grid& grid)
 		{
 			cells[y] = grid.cells[index(column, 3 - y)];
 		}
-		lookup_move(cells);
+		move(cells);
 		for(int y = 0; y < 4; y++)
 		{
 			grid.cells[index(column, 3 - y)] = cells[y];
@@ -49,7 +72,7 @@ void shift_left(Grid& grid)
 		{
 			cells[x] = grid.cells[index(x, row)];
 		}
-		lookup_move(cells);
+		move(cells);
 		for(int x = 0; x < 4; x++)
 		{
 			grid.cells[index(x, row)] = cells[x];
@@ -67,7 +90,7 @@ void shift_right(Grid& grid)
 		{
 			cells[x] = grid.cells[index(3 - x, row)];
 		}
-		lookup_move(cells);
+		move(cells);
 		for(int x = 0; x < 4; x++)
 		{
 			grid.cells[index(3 - x, row)] = cells[x];
@@ -103,12 +126,9 @@ int gradient(const Grid& grid)
 
     for(int x = 0; x < 4; x++){
         for(int y = 0; y < 4; y++){
-			int value = 1 << grid.cells[index(x,y)];
-			if (grid.cells[index(x,y)] != 1) // i.e. cell not empty
-			{
-				gradientX += value * (2 * x - 3);
-				gradientY += value * (2 * y - 3);
-			}
+			int value = grid.cells[index(x,y)];
+			gradientX += value * (2 * x - 3);
+			gradientY += value * (2 * y - 3);
 		}
     }
 

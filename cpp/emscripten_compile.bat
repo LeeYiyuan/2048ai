@@ -1,1 +1,1 @@
-emcc -O3 expectimax.cpp grid.cpp move.cpp -o c_expectimax.js --memory-init-file 1 -s EXPORTED_FUNCTIONS="['_c_best_direction', '_init_move_table']" -s NO_EXIT_RUNTIME=1
+emcc -O3 expectimax.cpp grid.cpp -o c_expectimax.js --memory-init-file 1 -s EXPORTED_FUNCTIONS="['_c_best_direction']" -s NO_EXIT_RUNTIME=1

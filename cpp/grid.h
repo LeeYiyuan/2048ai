@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <string>
 
-typedef uint8_t cell_t;
+typedef uint16_t cell_t;
 
 struct Grid
 {
@@ -41,6 +41,7 @@ inline int index(int x, int y)
 }
 
 // Movements
+void move(cell_t cells[4]);
 void shift_up(Grid& grid);
 void shift_down(Grid& grid);
 void shift_left(Grid& grid);

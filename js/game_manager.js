@@ -56,7 +56,6 @@ GameManager.prototype.setup = function () {
 
     // Update the actuator
     this.actuate();
-    initMoveTable();
 
     this.aiLoop();
 };
@@ -81,7 +80,7 @@ GameManager.prototype.botMove = function() {
     for (var x = 0; x < 4; x++) {
         for (var y = 0; y < 4; y++) {
             if (this.grid.cellOccupied({x: x, y: y})) {
-                _grid[x][y] = Math.log(this.grid.cellContent({ x: x, y: y }).value) / Math.log(2);
+                _grid[x][y] = this.grid.cellContent({ x: x, y: y }).value;
             } else {
                 _grid[x][y] = 0;
             }
