@@ -1,12 +1,18 @@
 #pragma once
 #include <stdint.h>
 #include <string>
+#include <vector>
 
 typedef uint16_t cell_t;
 
 struct Grid
 {
 	cell_t cells[16];
+
+	Grid()
+	{
+		for(int i = 0; i < 16; cells[i] = 0, i++);
+	}
 
 	inline bool operator ==(const Grid& grid) const
 	{
@@ -51,3 +57,5 @@ void move(Grid& grid, int direction);
 // Heuristics
 int gradient(const Grid& grid);
 bool has_move(const Grid& grid);
+void get_empty_cells(std::vector<int>& output, const Grid& grid);
+cell_t highest(const Grid& grid);

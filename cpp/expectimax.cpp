@@ -32,6 +32,11 @@ int c_best_direction(
 	grid.cells[index(3, 2)] = c32;
 	grid.cells[index(3, 3)] = c33;
 	
+	return best_direction(grid, depth);
+}
+
+int best_direction(const Grid& grid, int depth)
+{
     double best_score = 0;
     int best_dir = -1;
 

@@ -67,7 +67,7 @@ GameManager.prototype.aiLoop = function(){
             self.botMove();
             self.aiLoop();
         }
-    }, 500);
+    }, 400);
 }
 
 GameManager.prototype.botMove = function() {

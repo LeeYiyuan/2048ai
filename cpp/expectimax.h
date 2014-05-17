@@ -17,6 +17,8 @@ extern "C"
 		int depth);
 }
 
+int best_direction(const Grid& grid, int depth);
+
 // Calculates the best possible move by player
 double player_move(const Grid& grid, Cache& cache, int depth);
 

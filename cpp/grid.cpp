@@ -1,6 +1,7 @@
 #include "grid.h"
 #include <cstdlib>
 #include <stdint.h>
+#include <vector>
 
 void move(cell_t cells[4])
 {
@@ -151,4 +152,28 @@ bool has_move(const Grid& grid)
 		}
 	}
 	return false;
+}
+
+void get_empty_cells(std::vector<int>& output, const Grid& grid)
+{
+	for(int i = 0; i < 16; i++)
+	{
+		if (grid.cells[i] == 0)
+		{
+			output.push_back(i);
+		}
+	}
+}
+
+cell_t highest(const Grid& grid)
+{
+	int h = 0;
+	for(int i = 0; i < 16; i++)
+	{
+		if (grid.cells[i] > h)
+		{
+			h = grid.cells[i];
+		}
+	}
+	return h;
 }
