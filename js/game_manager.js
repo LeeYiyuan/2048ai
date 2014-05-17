@@ -3,12 +3,15 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
     this.inputManager   = new InputManager;
     this.storageManager = new StorageManager;
     this.actuator       = new Actuator;
+    this.botActive = false;
 
     this.startTiles     = 2;
 
     this.inputManager.on("move", this.move.bind(this));
     this.inputManager.on("restart", this.restart.bind(this));
     this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
+    this.inputManager.on("startAIFast", this.startAIFast.bind(this));
+    this.inputManager.on("startAIDeep", this.startAIDeep.bind(this));
 
     this.setup();
 }
@@ -25,6 +28,28 @@ GameManager.prototype.keepPlaying = function () {
     this.keepPlaying = true;
     this.actuator.continueGame(); // Clear the game won/lost message
 };
+
+GameManager.prototype.startAIFast = function(){
+    this.botActive = true;
+    var self = this;
+    setTimeout(function(){
+        if (!self.isGameTerminated() && self.botActive) {
+            self.botMove(3);
+            self.startAIFast();
+        }
+    }, 300);
+}
+
+GameManager.prototype.startAIDeep = function(){
+    this.botActive = true;
+    var self = this;
+    setTimeout(function(){
+        if (!self.isGameTerminated() && self.botActive) {
+            self.botMove(4);
+            self.startAIDeep();
+        }
+    }, 500);
+}
 
 // Return true if the game is lost, or has won and the user hasn't kept playing
 GameManager.prototype.isGameTerminated = function () {
@@ -53,24 +78,13 @@ GameManager.prototype.setup = function () {
         // Add the initial tiles
         this.addStartTiles();
     }
+    this.botActive = false;
 
     // Update the actuator
     this.actuate();
-
-    this.aiLoop();
 };
 
-GameManager.prototype.aiLoop = function(){
-    var self = this;
-    setTimeout(function(){
-        if (!self.isGameTerminated()) {
-            self.botMove();
-            self.aiLoop();
-        }
-    }, 400);
-}
-
-GameManager.prototype.botMove = function() {
+GameManager.prototype.botMove = function(depth) {
     var _grid = [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -87,7 +101,7 @@ GameManager.prototype.botMove = function() {
         }
     }
 
-    var best = bestMove(_grid);
+    var best = bestMove(_grid, depth);
     this.move(best);
 }
 

@@ -479,7 +479,15 @@ hr {
 .above-game:after {
   content: "";
   display: block;
-  clear: both; }
+  clear: both;
+  margin-bottom: 10px;
+}
+
+.ai-container:after{
+    content:"";
+    display:block;
+    clear:both;
+}
 
 .game-intro {
   float: left;
@@ -709,3 +717,31 @@ hr {
     margin-top: 90px !important; }
   .game-message .lower {
     margin-top: 30px !important; } }
+
+.start-ai-fast-button {
+    display: inline-block;
+    background: #8f7a66;
+    border-radius: 3px;
+    padding: 0 20px;
+    text-decoration: none;
+    color: #f9f6f2;
+    height: 40px;
+    line-height: 42px;
+    display: block;
+    text-align: center;
+    float: right;
+    margin-right: 10px;
+}
+
+.start-ai-deep-button {
+    display: inline-block;
+    background: #8f7a66;
+    border-radius: 3px;
+    padding: 0 20px;
+    text-decoration: none;
+    color: #f9f6f2;
+    height: 40px;
+    line-height: 42px;
+    display: block;
+    text-align: center;
+    float: right; }
