@@ -726,7 +726,6 @@ hr {
     margin-top: 30px !important; } }
 
 .start-ai-fast-button {
-    display: inline-block;
     background: #8f7a66;
     border-radius: 3px;
     padding: 0 20px;
@@ -734,14 +733,12 @@ hr {
     color: #f9f6f2;
     height: 40px;
     line-height: 42px;
-    display: block;
     text-align: center;
     float: right;
-    margin-right: 10px;
+    margin-right: 2px;
 }
 
 .start-ai-deep-button {
-    display: inline-block;
     background: #8f7a66;
     border-radius: 3px;
     padding: 0 20px;
@@ -749,7 +746,6 @@ hr {
     color: #f9f6f2;
     height: 40px;
     line-height: 42px;
-    display: block;
     text-align: center;
     float: right; }
 
