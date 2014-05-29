@@ -1,11 +1,11 @@
 function GameManager(size, InputManager, Actuator, StorageManager) {
-    this.size           = size; // Size of the grid
-    this.inputManager   = new InputManager;
+    this.size = size; // Size of the grid
+    this.inputManager = new InputManager;
     this.storageManager = new StorageManager;
-    this.actuator       = new Actuator;
+    this.actuator = new Actuator;
     this.botActive = false;
 
-    this.startTiles     = 2;
+    this.startTiles = 2;
 
     this.inputManager.on("move", this.move.bind(this));
     this.inputManager.on("restart", this.restart.bind(this));
@@ -14,7 +14,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
     this.inputManager.on("startAIDeep", this.startAIDeep.bind(this));
 
     this.setup();
-}
+};
 
 // Restart the game
 GameManager.prototype.restart = function () {
