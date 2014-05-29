@@ -752,3 +752,10 @@ hr {
     display: block;
     text-align: center;
     float: right; }
+
+.fb-share-button {
+    vertical-align: top;
+}
+.fb_iframe_widget span {
+    vertical-align: text-top !important;
+}
