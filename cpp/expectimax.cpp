@@ -6,7 +6,6 @@
 const int MOVES[MOVES_COUNT] = {2, 4}; // Randomly added tiles
 const double PROBABILITIES[MOVES_COUNT] = {0.9, 0.1}; // Probabilities of randomly added tiles
 
-// Exported function. Call this to compute the best possible move.
 int c_best_direction(
 	int c00, int c01, int c02, int c03,
 	int c10, int c11, int c12, int c13,
@@ -37,10 +36,10 @@ int c_best_direction(
 
 int best_direction(const Grid& grid, int depth)
 {
-    double best_score = 0;
-    int best_dir = -1;
+	double best_score = 0;
+	int best_dir = -1;
 
-    for(int direction = 0; direction < 4; direction++){
+	for(int direction = 0; direction < 4; direction++){
 		Grid computer_grid = grid;
 		move(computer_grid, direction);
 		
@@ -51,26 +50,25 @@ int best_direction(const Grid& grid, int depth)
 		
 		double computer_score = computer_move(computer_grid, 2 * depth - 1);
 				
-        if (computer_score >= best_score){ // Equality : Forces a move even when deadend is expected
-            best_score = computer_score;
-            best_dir = direction;
-        }
-    }
+		if (computer_score >= best_score){ // Equality : Forces a move even when deadend is expected
+			best_score = computer_score;
+			best_dir = direction;
+		}
+	}
 
 	return best_dir;
 }
 
-// Calculates the best possible move by player.
 double player_move(const Grid& grid, Cache& cache,int depth)
 {
 	if (depth == 0) // End of branch
 	{		
-		return has_move(grid) ? gradient(grid) : 0; // has_move(grid) Penalizes dead end
+		return has_move(grid) ? evaluate_heuristic(grid) : 0; // has_move(grid) Penalizes dead end
 	}
 
-    double best_score = 0;
+	double best_score = 0;
 
-    for(int direction = 0; direction < 4; direction++){
+	for(int direction = 0; direction < 4; direction++){
 		Grid computer_grid = grid;
 		move(computer_grid, direction);
 
@@ -93,15 +91,14 @@ double player_move(const Grid& grid, Cache& cache,int depth)
 			cache[computer_grid] = computer_score;
 		}
 
-        if (computer_score > best_score){
-            best_score = computer_score;
-        }
-    }
+		if (computer_score > best_score){
+			best_score = computer_score;
+		}
+	}
 		
 	return best_score;
 }
 
-// Calculates the score, averaged (with weights) over randomly added tiles.
 double computer_move(const Grid& grid, int depth)
 {
 	double total_score = 0;

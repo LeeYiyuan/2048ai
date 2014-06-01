@@ -17,10 +17,11 @@ extern "C"
 		int depth);
 }
 
+// Computes the best direction for a given grid to a given depth.
 int best_direction(const Grid& grid, int depth);
 
-// Calculates the best possible move by player
+// Calculates the best possible move by player.
 double player_move(const Grid& grid, Cache& cache, int depth);
 
-// Calculates the score, averaged (with weights) over randomly added tiles
+// Calculates the score, averaged (with weights) over posibly added tiles.
 double computer_move(const Grid& grid, int depth);
