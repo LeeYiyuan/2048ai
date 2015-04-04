@@ -34,7 +34,7 @@ GameManager.prototype.startAIFast = function(){
     var self = this;
     setTimeout(function(){
         if (!self.isGameTerminated() && self.botActive) {
-            self.botMove(3);
+            self.botMove(2); // Excludes root level branches
             self.startAIFast();
         }
     }, 300);
@@ -45,7 +45,7 @@ GameManager.prototype.startAIDeep = function(){
     var self = this;
     setTimeout(function(){
         if (!self.isGameTerminated() && self.botActive) {
-            self.botMove(4);
+            self.botMove(3); // Excludes root level branches
             self.startAIDeep();
         }
     }, 500);
